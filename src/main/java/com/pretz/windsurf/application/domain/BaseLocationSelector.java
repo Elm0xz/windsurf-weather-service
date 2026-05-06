@@ -1,12 +1,15 @@
 package com.pretz.windsurf.application.domain;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class BaseLocationSelector implements LocationSelector {
 
     @Override
     public Optional<Location> selectOptimalLocation(List<Location> locations) {
+        Objects.requireNonNull(locations);
+
         return locations.stream()
                 .filter(this::isWindInRange)
                 .filter(this::isTemperatureInRange)
@@ -22,6 +25,10 @@ public class BaseLocationSelector implements LocationSelector {
     }
 
     private int compareValues(Location loc1, Location loc2) {
-        return (int) Math.signum(loc1.windSpeed() * 3 + loc1.temperature() - loc2.windSpeed() * 3 - loc2.temperature());
+        return Double.compare(value(loc1), value(loc2));
+    }
+
+    private double value(Location location) {
+        return location.windSpeed() * 3 + location.temperature();
     }
 }
