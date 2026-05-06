@@ -8,7 +8,7 @@ public class BaseLocationSelector implements LocationSelector {
 
     @Override
     public Optional<Location> selectOptimalLocation(List<Location> locations) {
-        Objects.requireNonNull(locations);
+        Objects.requireNonNull(locations, "locations must not be null");
 
         return locations.stream()
                 .filter(this::isWindInRange)

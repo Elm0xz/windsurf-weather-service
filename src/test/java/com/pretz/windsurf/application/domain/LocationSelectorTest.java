@@ -62,6 +62,14 @@ public class LocationSelectorTest {
         Assertions.assertThat(result).isEqualTo(Optional.of(new Location("Jastarnia", "PL", 15.0, 25.0)));
     }
 
+    @Test
+    public void shouldRejectNullLocations() {
+        var locationSelector = getLocationSelectorUnderTest();
+
+        Assertions.assertThatNullPointerException()
+                .isThrownBy(() -> locationSelector.selectOptimalLocation(null));
+    }
+
     private LocationSelector getLocationSelectorUnderTest() {
         return new BaseLocationSelector();
     }
