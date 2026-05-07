@@ -1,4 +1,7 @@
-package com.pretz.windsurf.application.domain;
+package com.pretz.windsurf.application.domain.service;
+
+import com.pretz.windsurf.application.domain.LocationSelector;
+import com.pretz.windsurf.application.domain.model.Location;
 
 import java.util.List;
 import java.util.Objects;

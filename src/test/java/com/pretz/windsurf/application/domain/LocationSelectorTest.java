@@ -1,5 +1,7 @@
 package com.pretz.windsurf.application.domain;
 
+import com.pretz.windsurf.application.domain.model.Location;
+import com.pretz.windsurf.application.domain.service.BaseLocationSelector;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
