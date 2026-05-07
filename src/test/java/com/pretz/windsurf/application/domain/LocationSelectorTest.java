@@ -1,10 +1,13 @@
 package com.pretz.windsurf.application.domain;
 
-import com.pretz.windsurf.application.domain.model.Location;
+import com.pretz.windsurf.application.domain.model.LocationForecast;
+import com.pretz.windsurf.application.domain.model.Forecast;
+import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.domain.service.BaseLocationSelector;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,16 +17,16 @@ public class LocationSelectorTest {
     public void shouldReturnOptimalLocation() {
         var locationSelector = getLocationSelectorUnderTest();
 
-        var locations = List.of(
-                new Location("Jastarnia", "PL", 25.2, 10.3),
-                new Location("Bridgetown", "BB", 16.3, 33.2),
-                new Location("Fortaleza", "BR", 9.9, 35.2),
-                new Location("Pissouri", "CY", 17.7, 29.3),
-                new Location("Le Morne", "MU", 30.2, 27.3)
+        var forecasts = List.of(
+                forecast("Jastarnia", "PL", 25.2, 10.3),
+                forecast("Bridgetown", "BB", 16.3, 33.2),
+                forecast("Fortaleza", "BR", 9.9, 35.2),
+                forecast("Pissouri", "CY", 17.7, 29.3),
+                forecast("Le Morne", "MU", 30.2, 27.3)
         );
 
-        var result = locationSelector.selectOptimalLocation(locations);
-        Assertions.assertThat(result).isEqualTo(Optional.of(new Location("Pissouri", "CY", 17.7, 29.3)));
+        var result = locationSelector.selectOptimalLocation(forecasts);
+        Assertions.assertThat(result).isEqualTo(Optional.of(new LocationForecast(new RawLocation("Pissouri", "CY"), 17.7, 29.3)));
     }
 
     @Test
@@ -31,9 +34,9 @@ public class LocationSelectorTest {
         var locationSelector = getLocationSelectorUnderTest();
 
         var locations = List.of(
-                new Location("Jastarnia", "PL", 25.2, 10.3),
-                new Location("Bridgetown", "BB", 3.3, 23.5),
-                new Location("Fortaleza", "BR", 9.9, 35.2)
+                forecast("Jastarnia", "PL", 25.2, 10.3),
+                forecast("Bridgetown", "BB", 3.3, 23.5),
+                forecast("Fortaleza", "BR", 9.9, 35.2)
         );
 
         var result = locationSelector.selectOptimalLocation(locations);
@@ -44,7 +47,7 @@ public class LocationSelectorTest {
     public void shouldReturnNoLocationIfNoLocationPassed() {
         var locationSelector = getLocationSelectorUnderTest();
 
-        List<Location> locations = List.of();
+        List<Forecast> locations = List.of();
 
         var result = locationSelector.selectOptimalLocation(locations);
         Assertions.assertThat(result).isEqualTo(Optional.empty());
@@ -55,13 +58,13 @@ public class LocationSelectorTest {
         var locationSelector = getLocationSelectorUnderTest();
 
         var locations = List.of(
-                new Location("Jastarnia", "PL", 15.0, 25.0),
-                new Location("Bridgetown", "BB", 15.0, 25.0),
-                new Location("Fortaleza", "BR", 9.9, 35.2)
+                forecast("Jastarnia", "PL", 15.0, 25.0),
+                forecast("Bridgetown", "BB", 15.0, 25.0),
+                forecast("Fortaleza", "BR", 9.9, 35.2)
         );
 
         var result = locationSelector.selectOptimalLocation(locations);
-        Assertions.assertThat(result).isEqualTo(Optional.of(new Location("Jastarnia", "PL", 15.0, 25.0)));
+        Assertions.assertThat(result).isEqualTo(Optional.of(new LocationForecast(new RawLocation("Jastarnia", "PL"), 15.0, 25.0)));
     }
 
     @Test
@@ -74,5 +77,19 @@ public class LocationSelectorTest {
 
     private LocationSelector getLocationSelectorUnderTest() {
         return new BaseLocationSelector();
+    }
+
+    private Forecast forecast(String name, String country, double windSpeed, double temperature) {
+        return new Forecast(
+                rawLocation(name, country),
+                LocalDate.now(),
+                LocalDate.now(),
+                windSpeed,
+                temperature
+        );
+    }
+
+    private RawLocation rawLocation(String name, String country) {
+        return new RawLocation(name, country);
     }
 }

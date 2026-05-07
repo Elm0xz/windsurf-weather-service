@@ -1,7 +1,8 @@
 package com.pretz.windsurf.application.domain.service;
 
 import com.pretz.windsurf.application.domain.LocationSelector;
-import com.pretz.windsurf.application.domain.model.Location;
+import com.pretz.windsurf.application.domain.model.LocationForecast;
+import com.pretz.windsurf.application.domain.model.Forecast;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,28 +11,27 @@ import java.util.Optional;
 public class BaseLocationSelector implements LocationSelector {
 
     @Override
-    public Optional<Location> selectOptimalLocation(List<Location> locations) {
-        Objects.requireNonNull(locations, "locations must not be null");
+    public Optional<LocationForecast> selectOptimalLocation(List<Forecast> forecasts) {
+        //TODO log warn instead
+        Objects.requireNonNull(forecasts, "forecasts must not be null");
 
-        return locations.stream()
+        return forecasts.stream()
                 .filter(this::isWindInRange)
                 .filter(this::isTemperatureInRange)
-                .max(this::compareValues);
+                .max(this::compareValues)
+                .map(res -> new LocationForecast(res.location(), res.windSpeed(), res.temperature()));
     }
 
-    private boolean isWindInRange(Location loc) {
+    private boolean isWindInRange(Forecast loc) {
         return loc.windSpeed() >= 5.0 && loc.windSpeed() <= 18.0;
     }
 
-    private boolean isTemperatureInRange(Location loc) {
+    private boolean isTemperatureInRange(Forecast loc) {
         return loc.temperature() >= 5.0 && loc.temperature() <= 35.0;
     }
 
-    private int compareValues(Location loc1, Location loc2) {
-        return Double.compare(value(loc1), value(loc2));
+    private int compareValues(Forecast loc1, Forecast loc2) {
+        return Double.compare(loc1.windsurfingValue(), loc2.windsurfingValue());
     }
 
-    private double value(Location location) {
-        return location.windSpeed() * 3 + location.temperature();
-    }
 }

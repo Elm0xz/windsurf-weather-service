@@ -1,11 +1,11 @@
 package com.pretz.windsurf.application.domain;
 
-import com.pretz.windsurf.application.domain.model.Location;
+import com.pretz.windsurf.application.domain.model.LocationForecast;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 public interface WindsurfWeatherService {
 
-    Optional<Location> findOptimalWindsurfingLocation(LocalDate date);
+    Optional<LocationForecast> findOptimalWindsurfingLocation(LocalDate date);
 }
