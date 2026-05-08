@@ -3,8 +3,8 @@ package com.pretz.windsurf.application.domain.service;
 import com.pretz.windsurf.application.domain.LocationSelector;
 import com.pretz.windsurf.application.domain.WindsurfWeatherService;
 import com.pretz.windsurf.application.domain.model.LocationForecast;
-import com.pretz.windsurf.application.domain.port.LocationsProviderPort;
-import com.pretz.windsurf.application.domain.port.WeatherForecastProviderPort;
+import com.pretz.windsurf.application.port.LocationsProviderPort;
+import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
 
 import java.time.LocalDate;
 import java.util.Optional;

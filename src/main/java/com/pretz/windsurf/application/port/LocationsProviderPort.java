@@ -1,4 +1,4 @@
-package com.pretz.windsurf.application.domain.port;
+package com.pretz.windsurf.application.port;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
 
