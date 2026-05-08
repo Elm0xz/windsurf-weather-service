@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class WindsurfWeatherServiceTest {
+class WindsurfWeatherServiceTest {
 
     private WindsurfWeatherService windsurfWeatherService;
 
@@ -26,7 +26,8 @@ public class WindsurfWeatherServiceTest {
 
         var result = windsurfWeatherService.findOptimalWindsurfingLocation(LocalDate.now());
 
-        Assertions.assertThat(result).isNotEmpty();
+        Assertions.assertThat(result).contains(new LocationForecast(
+                new RawLocation("Pcim", "PL"), 15.0, 15.0));
     }
 
     @Test
@@ -41,13 +42,12 @@ public class WindsurfWeatherServiceTest {
         Assertions.assertThat(result).isEmpty();
     }
 
-    //TODO unit test for null date? (or for validators)
-
     static class LocationSelectorMock implements LocationSelector {
 
         @Override
         public Optional<LocationForecast> selectOptimalLocation(List<Forecast> forecasts) {
-            return Optional.of(new LocationForecast(new RawLocation("Pcim", "PL"), 15.0, 15.0));
+            return Optional.of(new LocationForecast(
+                    new RawLocation("Pcim", "PL"), 15.0, 15.0));
         }
     }
 

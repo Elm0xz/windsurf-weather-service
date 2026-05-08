@@ -1,7 +1,7 @@
 package com.pretz.windsurf.application.domain;
 
-import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.Forecast;
+import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.domain.service.BaseLocationSelector;
 import org.assertj.core.api.Assertions;
@@ -9,12 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-public class LocationSelectorTest {
+class LocationSelectorTest {
 
     @Test
-    public void shouldReturnOptimalLocation() {
+    void shouldReturnOptimalLocation() {
         var locationSelector = getLocationSelectorUnderTest();
 
         var forecasts = List.of(
@@ -26,49 +25,51 @@ public class LocationSelectorTest {
         );
 
         var result = locationSelector.selectOptimalLocation(forecasts);
-        Assertions.assertThat(result).isEqualTo(Optional.of(new LocationForecast(new RawLocation("Pissouri", "CY"), 17.7, 29.3)));
+        Assertions.assertThat(result).contains(new LocationForecast(
+                new RawLocation("Pissouri", "CY"), 17.7, 29.3));
     }
 
     @Test
-    public void shouldReturnNoLocationIfNoneMeetsCriteria() {
+    void shouldReturnNoLocationIfNoneMeetsCriteria() {
         var locationSelector = getLocationSelectorUnderTest();
 
-        var locations = List.of(
+        var forecasts = List.of(
                 forecast("Jastarnia", "PL", 25.2, 10.3),
                 forecast("Bridgetown", "BB", 3.3, 23.5),
                 forecast("Fortaleza", "BR", 9.9, 35.2)
         );
 
-        var result = locationSelector.selectOptimalLocation(locations);
-        Assertions.assertThat(result).isEqualTo(Optional.empty());
+        var result = locationSelector.selectOptimalLocation(forecasts);
+        Assertions.assertThat(result).isEmpty();
     }
 
     @Test
-    public void shouldReturnNoLocationIfNoLocationPassed() {
+    void shouldReturnNoLocationIfNoLocationPassed() {
         var locationSelector = getLocationSelectorUnderTest();
 
-        List<Forecast> locations = List.of();
+        List<Forecast> forecasts = List.of();
 
-        var result = locationSelector.selectOptimalLocation(locations);
-        Assertions.assertThat(result).isEqualTo(Optional.empty());
+        var result = locationSelector.selectOptimalLocation(forecasts);
+        Assertions.assertThat(result).isEmpty();
     }
 
     @Test
-    public void shouldReturnFirstOptimalLocationInCaseMoreThanOneIsOptimal() {
+    void shouldReturnFirstOptimalLocationInCaseMoreThanOneIsOptimal() {
         var locationSelector = getLocationSelectorUnderTest();
 
-        var locations = List.of(
+        var forecasts = List.of(
                 forecast("Jastarnia", "PL", 15.0, 25.0),
                 forecast("Bridgetown", "BB", 15.0, 25.0),
                 forecast("Fortaleza", "BR", 9.9, 35.2)
         );
 
-        var result = locationSelector.selectOptimalLocation(locations);
-        Assertions.assertThat(result).isEqualTo(Optional.of(new LocationForecast(new RawLocation("Jastarnia", "PL"), 15.0, 25.0)));
+        var result = locationSelector.selectOptimalLocation(forecasts);
+        Assertions.assertThat(result).contains(new LocationForecast(
+                new RawLocation("Jastarnia", "PL"), 15.0, 25.0));
     }
 
     @Test
-    public void shouldRejectNullLocations() {
+    void shouldRejectNullLocations() {
         var locationSelector = getLocationSelectorUnderTest();
 
         Assertions.assertThatNullPointerException()

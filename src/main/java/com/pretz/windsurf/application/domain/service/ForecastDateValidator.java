@@ -12,7 +12,9 @@ public class ForecastDateValidator {
             throw new InvalidForecastDateException(NULL_MESSAGE);
         }
 
-        if (date.isAfter(LocalDate.now().plusDays(7)) || date.isBefore(LocalDate.now())) {
+        LocalDate today = LocalDate.now();
+
+        if (date.isAfter(today.plusDays(7)) || date.isBefore(today)) {
             throw new InvalidForecastDateException(FORECAST_DATE_ERROR_MESSAGE);
         }
     }
