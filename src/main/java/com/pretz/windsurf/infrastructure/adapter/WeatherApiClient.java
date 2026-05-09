@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface WeatherApiClient {
 
-    List<Forecast> getWeatherFor(RawLocation location, LocalDate requestDate);
+    List<Forecast> getLongtermForecastFor(RawLocation location, LocalDate requestDate);
 }

@@ -3,7 +3,7 @@ package com.pretz.windsurf.application.domain.model;
 import java.time.LocalDate;
 
 /**
- * Entity representing full weather forecast for a location.
+ * Entity representing full weather forecast for a location and particular day.
  * @param location
  * @param requestDate
  * @param forecastDate

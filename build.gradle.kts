@@ -13,9 +13,11 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+    testImplementation("org.wiremock:wiremock-standalone:3.13.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
