@@ -19,7 +19,8 @@ public class BaseLocationSelector implements LocationSelector {
                 .filter(this::isWindInRange)
                 .filter(this::isTemperatureInRange)
                 .max(this::compareValues)
-                .map(res -> new LocationForecast(res.location(), res.windSpeed(), res.temperature()));
+                .map(fc -> new LocationForecast(fc.location(),
+                        fc.windSpeed(), fc.temperature()));
     }
 
     private boolean isWindInRange(Forecast loc) {
