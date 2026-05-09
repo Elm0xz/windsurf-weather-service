@@ -12,7 +12,12 @@ class WeatherbitApiClientRunner {
         var client = RestClient.builder()
                 .baseUrl("https://api.weatherbit.io")
                 .build();
-        var result = new WeatherbitApiClient(client).getLongtermForecastFor(new RawLocation("Łódź", "PL"), LocalDate.now());
+        //TODO remove this
+        String apiKey = "2f2da76fe6674f6293a9ff2f04981556";
+        int forecastDays = 7;
+        String forecastPath = "/v2.0/forecast/daily";
+        var result = new WeatherbitApiClient(client, apiKey, forecastDays, forecastPath)
+                .getLongtermForecastFor(new RawLocation("Łódź", "PL"), LocalDate.now());
 
         System.out.println(result);
     }

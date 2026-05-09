@@ -1,0 +1,3 @@
+### Get optimal windsurfing location for a date
+GET http://localhost:8080/?date=2026-05-09
+Accept: application/json

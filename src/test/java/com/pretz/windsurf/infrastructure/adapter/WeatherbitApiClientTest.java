@@ -24,7 +24,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class WeatherbitApiClientTest {
 
-    private static final String API_KEY = "2f2da76fe6674f6293a9ff2f04981556";
+    //TODO remove this
+    private static final String apiKey = "2f2da76fe6674f6293a9ff2f04981556";
+    private static final int forecastDays = 7;
+    private static final String forecastPath = "/v2.0/forecast/daily";
 
     @RegisterExtension
     static WireMockExtension wireMock = WireMockExtension.newInstance()
@@ -33,7 +36,7 @@ class WeatherbitApiClientTest {
     @Test
     void shouldFetchAndMapForecastsFromWeatherbitApi() {
         wireMock.stubFor(get(urlPathEqualTo("/v2.0/forecast/daily"))
-                .withQueryParam("key", equalTo(API_KEY))
+                .withQueryParam("key", equalTo(apiKey))
                 .withQueryParam("days", equalTo("7"))
                 .withQueryParam("city", equalTo("Tarifa"))
                 .withQueryParam("country", equalTo("ES"))
@@ -43,7 +46,7 @@ class WeatherbitApiClientTest {
                 .baseUrl(wireMock.baseUrl())
                 .build();
 
-        var client = new WeatherbitApiClient(restClient);
+        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath);
 
         var location = new RawLocation("Tarifa", "ES");
         var requestDate = LocalDate.of(2026, 5, 9);
@@ -65,7 +68,7 @@ class WeatherbitApiClientTest {
         assertThat(result.get(1).temperature()).isEqualTo(21.5);
 
         wireMock.verify(getRequestedFor(urlPathEqualTo("/v2.0/forecast/daily"))
-                .withQueryParam("key", equalTo(API_KEY))
+                .withQueryParam("key", equalTo(apiKey))
                 .withQueryParam("days", equalTo("7"))
                 .withQueryParam("city", equalTo("Tarifa"))
                 .withQueryParam("country", equalTo("ES")));
@@ -99,7 +102,7 @@ class WeatherbitApiClientTest {
                 .baseUrl(wireMock.baseUrl())
                 .build();
 
-        var client = new WeatherbitApiClient(restClient);
+        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath);
 
         var location = new RawLocation("Tarifa", "ES");
         var requestDate = LocalDate.of(2026, 5, 9);
@@ -119,7 +122,7 @@ class WeatherbitApiClientTest {
                 .baseUrl(wireMock.baseUrl())
                 .build();
 
-        var client = new WeatherbitApiClient(restClient);
+        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath);
 
         var location = new RawLocation("Tarifa", "ES");
         var requestDate = LocalDate.of(2026, 5, 9);

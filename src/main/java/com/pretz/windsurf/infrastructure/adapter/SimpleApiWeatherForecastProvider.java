@@ -3,6 +3,7 @@ package com.pretz.windsurf.infrastructure.adapter;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Service
 public class SimpleApiWeatherForecastProvider implements WeatherForecastProviderPort, AutoCloseable {
 
     private final WeatherApiClient apiClient;

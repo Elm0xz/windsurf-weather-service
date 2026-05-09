@@ -1,13 +1,15 @@
 package com.pretz.windsurf.application.domain.service;
 
 import com.pretz.windsurf.application.domain.LocationSelector;
-import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.Forecast;
+import com.pretz.windsurf.application.domain.model.LocationForecast;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Service
 public class BaseLocationSelector implements LocationSelector {
 
     @Override

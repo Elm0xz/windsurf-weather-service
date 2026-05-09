@@ -2,6 +2,8 @@ package com.pretz.windsurf.infrastructure.adapter;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.LocationsProviderPort;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
@@ -9,12 +11,14 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class JsonLocationsProvider implements LocationsProviderPort {
 
     private final String locationsSourceName;
     private final ObjectMapper mapper;
 
-    public JsonLocationsProvider(String locationsSourceName, ObjectMapper mapper) {
+    public JsonLocationsProvider(@Value("${windsurf.locations.source-name}") String locationsSourceName,
+                                 ObjectMapper mapper) {
         this.locationsSourceName = locationsSourceName;
         this.mapper = mapper;
     }

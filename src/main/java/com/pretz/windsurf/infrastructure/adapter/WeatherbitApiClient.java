@@ -3,23 +3,30 @@ package com.pretz.windsurf.infrastructure.adapter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class WeatherbitApiClient implements WeatherApiClient {
 
-    //TODO both to configs and maybe anonymize or set as parameter for application run
-    private static final String API_KEY = "2f2da76fe6674f6293a9ff2f04981556";
-    private static final int FORECAST_DAYS = 7;
-    private static final String FORECAST_PATH = "/v2.0/forecast/daily";
-
     private final RestClient restClient;
+    private final String apiKey;
+    private final int forecastDays;
+    private final String forecastPath;
 
-    public WeatherbitApiClient(RestClient restClient) {
+    public WeatherbitApiClient(RestClient restClient,
+                               @Value("${windsurf.weatherbit.api-key}") String apiKey,
+                               @Value("${windsurf.weatherbit.forecast-days}") int forecastDays,
+                               @Value("${windsurf.weatherbit.forecast-path}") String forecastPath) {
         this.restClient = restClient;
+        this.apiKey = apiKey;
+        this.forecastDays = forecastDays;
+        this.forecastPath = forecastPath;
     }
 
     @Override
@@ -43,9 +50,9 @@ public class WeatherbitApiClient implements WeatherApiClient {
     private ForecastDto fetchForecasts(RawLocation location) {
         return restClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(FORECAST_PATH)
-                        .queryParam("key", API_KEY)
-                        .queryParam("days", FORECAST_DAYS)
+                        .path(forecastPath)
+                        .queryParam("key", apiKey)
+                        .queryParam("days", forecastDays)
                         .queryParam("city", location.name())
                         .queryParam("country", location.countryCode())
                         .build())

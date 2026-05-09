@@ -5,7 +5,8 @@ import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.LocationsProviderPort;
 import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
-import com.pretz.windsurf.application.domain.service.BaseWindsurfWeatherService;
+import com.pretz.windsurf.application.domain.service.WindsurfWeatherService;
+import com.pretz.windsurf.application.port.WindsurfWeatherPort;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +17,11 @@ import java.util.Optional;
 //TODO refactor later
 class WindsurfWeatherServiceTest {
 
-    private WindsurfWeatherService windsurfWeatherService;
+    private WindsurfWeatherPort windsurfWeatherService;
 
     @Test
     void shouldReturnLocationSelectedFromProvidedLocations() {
-        windsurfWeatherService = new BaseWindsurfWeatherService(
+        windsurfWeatherService = new WindsurfWeatherService(
                 new LocationsProviderMock(),
                 new WeatherForecastProviderMock(),
                 new LocationSelectorMock());
@@ -33,7 +34,7 @@ class WindsurfWeatherServiceTest {
 
     @Test
     void shouldReturnEmptyWhenNoSuitableLocationFound() {
-        windsurfWeatherService = new BaseWindsurfWeatherService(
+        windsurfWeatherService = new WindsurfWeatherService(
                 new LocationsProviderMock(),
                 new WeatherForecastProviderMock(),
                 new NoSuitableLocationSelectorMock());
