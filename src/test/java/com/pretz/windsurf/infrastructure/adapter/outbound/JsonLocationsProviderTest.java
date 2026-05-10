@@ -17,7 +17,7 @@ class JsonLocationsProviderTest {
 
     @Test
     void shouldProvideLocationsListFromJson() {
-        var provider = new JsonLocationsProvider("testlocations.json",
+        var provider = new JsonLocationsProvider("test-locations.json",
                 new ObjectMapper(), new LocationsValidator());
 
         List<RawLocation> locations = provider.provideLocations();
@@ -45,9 +45,9 @@ class JsonLocationsProviderTest {
 
     private static Stream<Arguments> failingLocationSources() {
         return Stream.of(
-                Arguments.of("missinglocations.json"),
-                Arguments.of("malformedlocations.json"),
-                Arguments.of("invalidlocations.json")
+                Arguments.of("missing-locations.json"),
+                Arguments.of("malformed-locations.json"),
+                Arguments.of("invalid-locations.json")
         );
     }
 }
