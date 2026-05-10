@@ -22,7 +22,7 @@ When multiple locations match the criteria, the service chooses the one with the
 value = windSpeed * 3 + temperature
 ```
 
-The requested forecast date must be between today and 7 days from today.
+The requested forecast date must be in the 7 forecast day range beginning from today.
 
 ## API
 
@@ -45,13 +45,13 @@ Example of a successful response:
 
 ### Possible responses
 
-| Status | Meaning |
-| --- | --- |
-| `200 OK` | Optimal location found |
-| `400 Bad Request` | Invalid date format or date outside supported range |
-| `404 Not Found` | No location matches windsurfing criteria |
-| `502 Bad Gateway` | Weather provider is unavailable |
-| `500 Internal Server Error` | Locations source cannot be loaded |
+| Status                      | Meaning                                             |
+|-----------------------------|-----------------------------------------------------|
+| `200 OK`                    | Optimal location found                              |
+| `400 Bad Request`           | Invalid date format or date outside supported range |
+| `404 Not Found`             | No location matches windsurfing criteria            |
+| `502 Bad Gateway`           | Weather provider is unavailable                     |
+| `500 Internal Server Error` | Locations source cannot be loaded                   |
 
 ## Setup
 
@@ -108,7 +108,7 @@ src/main/java/com/pretz/windsurf
 
 The project follows a hexagonal architecture:
 
-- `application` contains business logic and ports
-- `infrastructure` contains Spring MVC controller, external API clients, JSON loading and configuration
-- domain logic is kept independent from external infrastructure.
+- `application` contains business logic, domain objects and ports
+- `infrastructure` contains infrastructure: Spring MVC controller & configuration, adapters implementing external API client and JSON loading module. 
+
 
