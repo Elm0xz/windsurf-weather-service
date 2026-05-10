@@ -3,7 +3,8 @@ package com.pretz.windsurf.infrastructure.adapter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import org.springframework.beans.factory.annotation.Value;
+import com.pretz.windsurf.infrastructure.configuration.WeatherbitProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -19,10 +20,18 @@ public class WeatherbitApiClient implements WeatherApiClient {
     private final int forecastDays;
     private final String forecastPath;
 
+    @Autowired
+    public WeatherbitApiClient(RestClient restClient, WeatherbitProperties weatherbitProperties) {
+        this(restClient,
+                weatherbitProperties.apiKey(),
+                weatherbitProperties.forecastDays(),
+                weatherbitProperties.forecastPath());
+    }
+
     public WeatherbitApiClient(RestClient restClient,
-                               @Value("${windsurf.weatherbit.api-key}") String apiKey,
-                               @Value("${windsurf.weatherbit.forecast-days}") int forecastDays,
-                               @Value("${windsurf.weatherbit.forecast-path}") String forecastPath) {
+                               String apiKey,
+                               int forecastDays,
+                               String forecastPath) {
         this.restClient = restClient;
         this.apiKey = apiKey;
         this.forecastDays = forecastDays;

@@ -3,6 +3,7 @@ package com.pretz.windsurf.application.domain;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
+import com.pretz.windsurf.application.domain.service.ForecastDateValidator;
 import com.pretz.windsurf.application.port.LocationsProviderPort;
 import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
 import com.pretz.windsurf.application.domain.service.WindsurfWeatherService;
@@ -24,7 +25,8 @@ class WindsurfWeatherServiceTest {
         windsurfWeatherService = new WindsurfWeatherService(
                 new LocationsProviderMock(),
                 new WeatherForecastProviderMock(),
-                new LocationSelectorMock());
+                new LocationSelectorMock(),
+                new ForecastDateValidator());
 
         var result = windsurfWeatherService.findOptimalWindsurfingLocation(LocalDate.now());
 
@@ -37,7 +39,8 @@ class WindsurfWeatherServiceTest {
         windsurfWeatherService = new WindsurfWeatherService(
                 new LocationsProviderMock(),
                 new WeatherForecastProviderMock(),
-                new NoSuitableLocationSelectorMock());
+                new NoSuitableLocationSelectorMock(),
+                new ForecastDateValidator());
 
         var result = windsurfWeatherService.findOptimalWindsurfingLocation(LocalDate.now());
 

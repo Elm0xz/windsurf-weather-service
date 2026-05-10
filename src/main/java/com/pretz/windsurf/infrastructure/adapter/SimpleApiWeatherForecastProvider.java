@@ -3,6 +3,7 @@ package com.pretz.windsurf.infrastructure.adapter;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
+import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -51,6 +52,7 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
     }
 
     @Override
+    @PreDestroy
     public void close() {
         executorService.shutdown();
     }

@@ -20,11 +20,12 @@ public class WindsurfWeatherService implements WindsurfWeatherPort {
 
     public WindsurfWeatherService(LocationsProviderPort locationsProvider,
                                   WeatherForecastProviderPort weatherForecastProvider,
-                                  LocationSelector locationSelector) {
+                                  LocationSelector locationSelector,
+                                  ForecastDateValidator validator) {
         this.locationsProvider = locationsProvider;
         this.weatherForecastProvider = weatherForecastProvider;
         this.locationSelector = locationSelector;
-        forecastDateValidator = new ForecastDateValidator();
+        this.forecastDateValidator = validator;
     }
 
     @Override

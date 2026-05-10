@@ -1,15 +1,17 @@
-package com.pretz.windsurf.infrastructure.adapter.controller;
+package com.pretz.windsurf.infrastructure.adapter.api;
 
 import com.pretz.windsurf.application.port.WindsurfWeatherPort;
-import com.pretz.windsurf.infrastructure.adapter.controller.dto.LocationForecastDto;
+import com.pretz.windsurf.infrastructure.adapter.api.dto.LocationForecastDto;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
 @RestController
-public class WindsurfWeatherController {
+public class WindsurfWeatherController implements WindsurfWeatherApi {
 
     private final WindsurfWeatherPort weatherPort;
 
@@ -17,9 +19,10 @@ public class WindsurfWeatherController {
         this.weatherPort = weatherPort;
     }
 
-    //TODO unit tests
-    @GetMapping("/")
-    public ResponseEntity<LocationForecastDto> getWindsurfingLocation(LocalDate date) {
+    @GetMapping("/api/windsurfing-location")
+    @Override
+    public ResponseEntity<LocationForecastDto> getWindsurfingLocation(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return weatherPort.findOptimalWindsurfingLocation(date)
                 .map(lf -> new LocationForecastDto(lf.location().name(), lf.windSpeed(), lf.temperature()))
                 .map(ResponseEntity::ok)
