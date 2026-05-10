@@ -7,7 +7,7 @@ import static org.springframework.boot.SpringApplication.run;
 @SpringBootApplication
 public class WindsurfWeatherApp {
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         run(WindsurfWeatherApp.class, args);
     }
 }

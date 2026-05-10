@@ -25,3 +25,7 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.bootJar {
+    archiveFileName = "windsurf-weather-service.jar"
+}
