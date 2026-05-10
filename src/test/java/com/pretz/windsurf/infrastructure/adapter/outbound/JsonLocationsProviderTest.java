@@ -1,7 +1,7 @@
 package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import com.pretz.windsurf.infrastructure.adapter.outbound.exception.LocationsProviderException;
+import com.pretz.windsurf.application.port.outbound.exception.LocationsUnavailableException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +37,7 @@ class JsonLocationsProviderTest {
         var provider = new JsonLocationsProvider(locationsSource,
                 new ObjectMapper());
 
-        Assertions.assertThatExceptionOfType(LocationsProviderException.class)
+        Assertions.assertThatExceptionOfType(LocationsUnavailableException.class)
                 .isThrownBy(provider::provideLocations)
                 .withMessage("Could not provide locations from resource: %s".formatted(locationsSource));
     }

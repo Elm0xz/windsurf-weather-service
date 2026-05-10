@@ -3,13 +3,14 @@ package com.pretz.windsurf.infrastructure.adapter.outbound;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.outbound.WeatherForecastProviderPort;
-import com.pretz.windsurf.infrastructure.adapter.outbound.exception.WeatherForecastProviderException;
+import com.pretz.windsurf.application.port.outbound.exception.ForecastProviderUnavailableException;
 import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
@@ -45,8 +46,8 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
                     .flatMap(List::stream)
                     .filter(fc -> requestDate.equals(fc.forecastDate()))
                     .toList();
-        } catch (CompletionException exception) {
-            throw new WeatherForecastProviderException(
+        } catch (CompletionException | CancellationException exception) {
+            throw new ForecastProviderUnavailableException(
                     "Could not fetch weather forecasts",
                     exception.getCause());
         }

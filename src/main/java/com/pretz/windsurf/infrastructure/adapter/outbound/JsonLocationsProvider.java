@@ -2,7 +2,7 @@ package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.outbound.LocationsProviderPort;
-import com.pretz.windsurf.infrastructure.adapter.outbound.exception.LocationsProviderException;
+import com.pretz.windsurf.application.port.outbound.exception.LocationsUnavailableException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.core.type.TypeReference;
@@ -32,7 +32,7 @@ public class JsonLocationsProvider implements LocationsProviderPort {
             return mapper.readValue(locationsStream, new TypeReference<>() {
             });
         } catch (Exception exception) {
-            throw new LocationsProviderException("Could not provide locations from resource: " + locationsSourceName,
+            throw new LocationsUnavailableException("Could not provide locations from resource: " + locationsSourceName,
                     exception);
         }
     }
