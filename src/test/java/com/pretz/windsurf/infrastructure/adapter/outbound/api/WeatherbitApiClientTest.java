@@ -1,4 +1,4 @@
-package com.pretz.windsurf.infrastructure.adapter.outbound;
+package com.pretz.windsurf.infrastructure.adapter.outbound.api;
 
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -6,13 +6,9 @@ import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.infrastructure.adapter.outbound.exception.WeatherApiClientException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.web.client.RestClient;
 
 import java.time.LocalDate;
-import java.util.stream.Stream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -22,6 +18,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.serverError;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class WeatherbitApiClientTest {
 
@@ -29,6 +26,7 @@ class WeatherbitApiClientTest {
     private static final String apiKey = "2f2da76fe6674f6293a9ff2f04981556";
     private static final int forecastDays = 7;
     private static final String forecastPath = "/v2.0/forecast/daily";
+    private final WeatherbitApiValidator validator = mock(WeatherbitApiValidator.class);
 
     @RegisterExtension
     static WireMockExtension wireMock = WireMockExtension.newInstance()
@@ -47,7 +45,8 @@ class WeatherbitApiClientTest {
                 .baseUrl(wireMock.baseUrl())
                 .build();
 
-        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath);
+
+        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath, validator);
 
         var location = new RawLocation("Tarifa", "ES");
         var requestDate = LocalDate.of(2026, 5, 9);
@@ -103,7 +102,7 @@ class WeatherbitApiClientTest {
                 .baseUrl(wireMock.baseUrl())
                 .build();
 
-        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath);
+        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath, validator);
 
         var location = new RawLocation("Tarifa", "ES");
         var requestDate = LocalDate.of(2026, 5, 9);
@@ -111,35 +110,5 @@ class WeatherbitApiClientTest {
         assertThatThrownBy(() -> client.getLongtermForecastFor(location, requestDate))
                 .isInstanceOf(WeatherApiClientException.class)
                 .hasMessage("Could not fetch long-term forecast from Weatherbit");
-    }
-
-    @ParameterizedTest
-    @MethodSource("malformedBodies")
-    void shouldThrowExceptionWhenWeatherbitReturnsMalformedBody(String body) {
-        wireMock.stubFor(get(urlPathEqualTo("/v2.0/forecast/daily"))
-                .willReturn(okJson(body)));
-
-        var restClient = RestClient.builder()
-                .baseUrl(wireMock.baseUrl())
-                .build();
-
-        var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath);
-
-        var location = new RawLocation("Tarifa", "ES");
-        var requestDate = LocalDate.of(2026, 5, 9);
-
-        assertThatThrownBy(() -> client.getLongtermForecastFor(location, requestDate))
-                .isInstanceOf(WeatherApiClientException.class)
-                .hasMessage("Weatherbit returned malformed forecast response body");
-    }
-
-
-    public static Stream<Arguments> malformedBodies() {
-        return Stream.of(Arguments.of(""),
-                Arguments.of("""
-                    {
-                      "city_name": "Tarifa"
-                    }
-                    """));
     }
 }

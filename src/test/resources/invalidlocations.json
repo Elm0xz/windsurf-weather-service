@@ -1,5 +1,10 @@
 [
   {
     "name": "Tarifa",
-    "countryCode": "ES"
+    "countryCode": "ESP"
   },
+  {
+    "name": "Jastarnia",
+    "countryCode": null
+  }
+]

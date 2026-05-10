@@ -1,4 +1,4 @@
-package com.pretz.windsurf.infrastructure.adapter.outbound;
+package com.pretz.windsurf.infrastructure.adapter.outbound.api;
 
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
@@ -30,11 +30,9 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
     @Override
     public List<Forecast> provideForecastsFor(List<RawLocation> locations, LocalDate requestDate) {
         //TODO validation on locations?
-        Objects.requireNonNull(locations, "locations must not be null");
-        Objects.requireNonNull(requestDate, "requestDate must not be null");
+        validateInput(locations, requestDate);
 
         var futures = locations.stream()
-                .filter(Objects::nonNull)
                 .map(location -> CompletableFuture.supplyAsync(
                         () -> apiClient.getLongtermForecastFor(location, requestDate),
                         executorService
@@ -50,6 +48,15 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
             throw new ForecastProviderUnavailableException(
                     "Could not fetch weather forecasts",
                     exception.getCause());
+        }
+    }
+
+    private void validateInput(List<RawLocation> locations, LocalDate requestDate) {
+        Objects.requireNonNull(locations, "locations must not be null");
+        Objects.requireNonNull(requestDate, "requestDate must not be null");
+
+        if (locations.stream().anyMatch(Objects::isNull)) {
+            throw new IllegalArgumentException("locations must not contain null elements");
         }
     }
 

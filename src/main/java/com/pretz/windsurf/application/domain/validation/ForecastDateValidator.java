@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class ForecastDateValidator {
 
     private static final String NULL_MESSAGE = "Forecast date must not be null";
-    private static final String FORECAST_DATE_ERROR_MESSAGE = "Forecast date should be in 7 day forecast range";
+    private static final String FORECAST_DATE_ERROR_MESSAGE = "Forecast date should be between today and 7 days from today";
 
     public void validate(LocalDate date) {
         if (date == null) {

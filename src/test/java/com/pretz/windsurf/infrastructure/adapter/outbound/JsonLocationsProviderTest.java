@@ -17,7 +17,7 @@ class JsonLocationsProviderTest {
     @Test
     void shouldProvideLocationsListFromJson() {
         var provider = new JsonLocationsProvider("testlocations.json",
-                new ObjectMapper());
+                new ObjectMapper(), new LocationsValidator());
 
         List<RawLocation> locations = provider.provideLocations();
 
@@ -32,18 +32,21 @@ class JsonLocationsProviderTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideFailingLocationsSources")
+    @MethodSource("failingLocationSources")
     void shouldFailProvidingLocations(String locationsSource) {
         var provider = new JsonLocationsProvider(locationsSource,
-                new ObjectMapper());
+                new ObjectMapper(), new LocationsValidator());
 
         Assertions.assertThatExceptionOfType(LocationsUnavailableException.class)
                 .isThrownBy(provider::provideLocations)
                 .withMessage("Could not provide locations from resource: %s".formatted(locationsSource));
     }
 
-    public static Stream<Arguments> provideFailingLocationsSources() {
-        return Stream.of(Arguments.of("invalidlocations.json"),
-                Arguments.of("missinglocations.json"));
+    private static Stream<Arguments> failingLocationSources() {
+        return Stream.of(
+                Arguments.of("missinglocations.json"),
+                Arguments.of("malformedlocations.json"),
+                Arguments.of("invalidlocations.json")
+        );
     }
 }

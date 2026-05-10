@@ -2,8 +2,9 @@ package com.pretz.windsurf.infrastructure.adapter.runner;
 
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import com.pretz.windsurf.infrastructure.adapter.outbound.SimpleApiWeatherForecastProvider;
-import com.pretz.windsurf.infrastructure.adapter.outbound.WeatherbitApiClient;
+import com.pretz.windsurf.infrastructure.adapter.outbound.api.SimpleApiWeatherForecastProvider;
+import com.pretz.windsurf.infrastructure.adapter.outbound.api.WeatherbitApiClient;
+import com.pretz.windsurf.infrastructure.adapter.outbound.api.WeatherbitApiValidator;
 import org.springframework.web.client.RestClient;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ class SimpleApiWeatherForecastProviderRunner {
         String forecastPath = "/v2.0/forecast/daily";
         List<Forecast> result;
         try (SimpleApiWeatherForecastProvider provider = new SimpleApiWeatherForecastProvider(
-                new WeatherbitApiClient(client, apiKey, forecastDays, forecastPath))) {
+                new WeatherbitApiClient(client, apiKey, forecastDays, forecastPath, new WeatherbitApiValidator()))) {
             result = provider.provideForecastsFor(List.of(new RawLocation("Tarifa", "ES"),
                             (new RawLocation("Jastarnia", "PL"))),
                     LocalDate.now());

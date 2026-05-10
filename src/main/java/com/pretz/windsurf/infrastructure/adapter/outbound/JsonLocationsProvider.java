@@ -17,11 +17,13 @@ public class JsonLocationsProvider implements LocationsProviderPort {
 
     private final String locationsSourceName;
     private final ObjectMapper mapper;
+    private final LocationsValidator locationsValidator;
 
     public JsonLocationsProvider(@Value("${windsurf.locations.source-name}") String locationsSourceName,
-                                 ObjectMapper mapper) {
+                                 ObjectMapper mapper, LocationsValidator locationsValidator) {
         this.locationsSourceName = locationsSourceName;
         this.mapper = mapper;
+        this.locationsValidator = locationsValidator;
     }
 
     @Override
@@ -29,8 +31,10 @@ public class JsonLocationsProvider implements LocationsProviderPort {
     public List<RawLocation> provideLocations() {
         try (InputStream locationsStream = Objects.requireNonNull(
                 getClass().getClassLoader().getResourceAsStream(locationsSourceName))) {
-            return mapper.readValue(locationsStream, new TypeReference<>() {
+            List<RawLocation> locations = mapper.readValue(locationsStream, new TypeReference<>() {
             });
+            locationsValidator.validate(locations);
+            return locations;
         } catch (Exception exception) {
             throw new LocationsUnavailableException("Could not provide locations from resource: " + locationsSourceName,
                     exception);

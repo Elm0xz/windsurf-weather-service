@@ -1,4 +1,4 @@
-package com.pretz.windsurf.infrastructure.adapter.outbound;
+package com.pretz.windsurf.infrastructure.adapter.outbound.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pretz.windsurf.application.domain.model.Forecast;
@@ -20,40 +20,38 @@ public class WeatherbitApiClient implements WeatherApiClient {
     private final String apiKey;
     private final int forecastDays;
     private final String forecastPath;
+    private final WeatherbitApiValidator validator;
 
     @Autowired
-    public WeatherbitApiClient(RestClient restClient, WeatherbitProperties weatherbitProperties) {
+    public WeatherbitApiClient(RestClient restClient, WeatherbitProperties weatherbitProperties, WeatherbitApiValidator validator) {
         this(restClient,
                 weatherbitProperties.apiKey(),
                 weatherbitProperties.forecastDays(),
-                weatherbitProperties.forecastPath());
+                weatherbitProperties.forecastPath(),
+                validator);
     }
 
     public WeatherbitApiClient(RestClient restClient,
                                String apiKey,
                                int forecastDays,
-                               String forecastPath) {
+                               String forecastPath,
+                               WeatherbitApiValidator validator) {
         this.restClient = restClient;
         this.apiKey = apiKey;
         this.forecastDays = forecastDays;
         this.forecastPath = forecastPath;
+        this.validator = validator;
     }
 
     @Override
     public List<Forecast> getLongtermForecastFor(RawLocation location, LocalDate requestDate) {
         try {
             ForecastDto response = fetchForecasts(location);
-            validateResponse(response);
+            validator.validateResponse(response);
 
             return mapResponse(location, requestDate, response);
         } catch (RestClientException exception) {
             throw new WeatherApiClientException("Could not fetch long-term forecast from Weatherbit", exception);
-        }
-    }
-
-    private void validateResponse(ForecastDto response) {
-        if (response == null || response.data() == null) {
-            throw new WeatherApiClientException("Weatherbit returned malformed forecast response body");
         }
     }
 
@@ -82,10 +80,10 @@ public class WeatherbitApiClient implements WeatherApiClient {
                 .toList();
     }
 
-    private record ForecastDto(List<DailyForecastDto> data) {
+    record ForecastDto(List<DailyForecastDto> data) {
     }
 
-    private record DailyForecastDto(
+    record DailyForecastDto(
             @JsonProperty("valid_date") LocalDate forecastDay,
             @JsonProperty("wind_spd") Double windSpeed,
             @JsonProperty("temp") Double temperature

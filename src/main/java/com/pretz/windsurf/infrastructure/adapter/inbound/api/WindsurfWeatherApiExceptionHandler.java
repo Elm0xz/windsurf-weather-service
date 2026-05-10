@@ -7,13 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 class WindsurfWeatherApiExceptionHandler {
 
     @ExceptionHandler(InvalidForecastDateException.class)
     ResponseEntity<ErrorResponse> handleInvalidForecastDate(InvalidForecastDateException exception) {
-        return ResponseEntity.badRequest().body(new ErrorResponse(exception.getMessage()));
+        return ResponseEntity.badRequest()
+                .body(new ErrorResponse(exception.getMessage()));
     }
 
     @ExceptionHandler(ForecastProviderUnavailableException.class)
@@ -24,8 +26,19 @@ class WindsurfWeatherApiExceptionHandler {
 
     @ExceptionHandler(LocationsUnavailableException.class)
     ResponseEntity<ErrorResponse> handleLocationsUnavailable() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.internalServerError()
                 .body(new ErrorResponse("Locations source is currently unavailable"));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
+        if ("date".equals(exception.getName())) {
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Date must be provided in ISO format: yyyy-mm-dd"));
+        }
+
+        return ResponseEntity.badRequest()
+                .body(new ErrorResponse("Invalid request parameter: " + exception.getName()));
     }
 
     private record ErrorResponse(String message) {
