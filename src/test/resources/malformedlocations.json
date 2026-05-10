@@ -1,5 +1,9 @@
 [
   {
     "name": "Tarifa",
-    "countryCode": "ES"
+    "countryCode": "ES",
+    "coordinates": {
+      "latitude": 36.0143,
+      "longitude": -5.6044
+    }
   },

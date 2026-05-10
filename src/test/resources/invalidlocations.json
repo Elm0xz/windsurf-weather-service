@@ -1,10 +1,18 @@
 [
   {
     "name": "Tarifa",
-    "countryCode": "ESP"
+    "countryCode": "ESP",
+    "coordinates": {
+      "latitude": 36.0143,
+      "longitude": -5.6044
+    }
   },
   {
     "name": "Jastarnia",
-    "countryCode": null
+    "countryCode": null,
+    "coordinates": {
+      "latitude": 54.6961,
+      "longitude": 18.6787
+    }
   }
 ]

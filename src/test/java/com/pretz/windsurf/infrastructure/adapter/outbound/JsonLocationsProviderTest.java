@@ -25,9 +25,9 @@ class JsonLocationsProviderTest {
                 .hasSize(3)
                 .extracting(RawLocation::name, RawLocation::countryCode)
                 .containsExactly(
-                        Assertions.tuple("Tarifa", "ES"),
-                        Assertions.tuple("Hood River", "US"),
-                        Assertions.tuple("Le Morne", "MU")
+                        Assertions.tuple("Tarifa", "ES", 36.0143, -5.6044),
+                        Assertions.tuple("Hood River", "US", 45.7054, -121.5215),
+                        Assertions.tuple("Le Morne", "MU", -20.4561, 57.3139)
                 );
     }
 

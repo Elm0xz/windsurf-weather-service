@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
+//TODO profiles
 @Configuration
 @EnableConfigurationProperties(WeatherbitProperties.class)
 public class WindsurfWeatherConfig {

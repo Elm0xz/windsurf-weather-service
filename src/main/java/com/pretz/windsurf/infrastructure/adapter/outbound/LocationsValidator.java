@@ -21,7 +21,8 @@ class LocationsValidator {
         return location == null
                 || isBlank(location.name())
                 || isBlank(location.countryCode())
-                || !location.countryCode().matches(COUNTRY_CODE_PATTERN);
+                || !location.countryCode().matches(COUNTRY_CODE_PATTERN)
+                || location.coordinates() == null;
     }
 
     private boolean isBlank(String value) {

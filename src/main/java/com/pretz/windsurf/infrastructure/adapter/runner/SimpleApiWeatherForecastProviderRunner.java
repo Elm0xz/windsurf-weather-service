@@ -1,5 +1,6 @@
 package com.pretz.windsurf.infrastructure.adapter.runner;
 
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.infrastructure.adapter.outbound.api.SimpleApiWeatherForecastProvider;
@@ -23,8 +24,8 @@ class SimpleApiWeatherForecastProviderRunner {
         List<Forecast> result;
         try (SimpleApiWeatherForecastProvider provider = new SimpleApiWeatherForecastProvider(
                 new WeatherbitApiClient(client, apiKey, forecastDays, forecastPath, new WeatherbitApiValidator()))) {
-            result = provider.provideForecastsFor(List.of(new RawLocation("Tarifa", "ES"),
-                            (new RawLocation("Jastarnia", "PL"))),
+            result = provider.provideForecastsFor(List.of(new RawLocation("Tarifa", "ES", new Coordinates(36.0143, -5.6044)),
+                            (new RawLocation("Jastarnia", "PL", new Coordinates(54.6961, 18.6787)))),
                     LocalDate.now());
         }
 

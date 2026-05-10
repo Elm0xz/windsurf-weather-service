@@ -61,8 +61,8 @@ public class WeatherbitApiClient implements WeatherApiClient {
                         .path(forecastPath)
                         .queryParam("key", apiKey)
                         .queryParam("days", forecastDays)
-                        .queryParam("city", location.name())
-                        .queryParam("country", location.countryCode())
+                        .queryParam("lat", location.coordinates().latitude())
+                        .queryParam("lon", location.coordinates().longitude())
                         .build())
                 .retrieve()
                 .body(ForecastDto.class);

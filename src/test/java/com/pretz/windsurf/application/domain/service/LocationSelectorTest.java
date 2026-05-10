@@ -1,5 +1,6 @@
 package com.pretz.windsurf.application.domain.service;
 
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
@@ -25,7 +26,7 @@ class LocationSelectorTest {
 
         var result = locationSelector.selectOptimalLocation(forecasts);
         Assertions.assertThat(result).contains(new LocationForecast(
-                new RawLocation("Pissouri", "CY"), 17.7, 29.3));
+                rawLocation("Pissouri", "CY"), 17.7, 29.3));
     }
 
     @Test
@@ -64,7 +65,7 @@ class LocationSelectorTest {
 
         var result = locationSelector.selectOptimalLocation(forecasts);
         Assertions.assertThat(result).contains(new LocationForecast(
-                new RawLocation("Jastarnia", "PL"), 15.0, 25.0));
+                rawLocation("Jastarnia", "PL"), 15.0, 25.0));
     }
 
     @Test
@@ -90,6 +91,17 @@ class LocationSelectorTest {
     }
 
     private RawLocation rawLocation(String name, String country) {
-        return new RawLocation(name, country);
+        return new RawLocation(name, country, coordinatesFor(name));
+    }
+
+    private Coordinates coordinatesFor(String name) {
+        return switch (name) {
+            case "Jastarnia" -> new Coordinates(54.6961, 18.6787);
+            case "Bridgetown" -> new Coordinates(13.0975, -59.6167);
+            case "Fortaleza" -> new Coordinates(-3.7319, -38.5267);
+            case "Pissouri" -> new Coordinates(34.6694, 32.7019);
+            case "Le Morne" -> new Coordinates(-20.4561, 57.3139);
+            default -> new Coordinates(0.0, 0.0);
+        };
     }
 }

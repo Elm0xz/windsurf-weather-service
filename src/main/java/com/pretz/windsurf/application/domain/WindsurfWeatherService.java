@@ -31,6 +31,7 @@ public class WindsurfWeatherService implements WindsurfWeatherPort {
     public Optional<LocationForecast> findOptimalWindsurfingLocation(LocalDate date) {
         forecastDateValidator.validate(date);
 
+        //TODO logging for found locations
         return locationSelector.selectOptimalLocation(
                 weatherForecastProvider.provideForecastsFor(
                         locationsProvider.provideLocations(), date));

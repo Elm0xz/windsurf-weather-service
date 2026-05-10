@@ -1,14 +1,26 @@
 [
   {
     "name": "Tarifa",
-    "countryCode": "ES"
+    "countryCode": "ES",
+    "coordinates": {
+      "latitude": 36.0143,
+      "longitude": -5.6044
+    }
   },
   {
     "name": "Hood River",
-    "countryCode": "US"
+    "countryCode": "US",
+    "coordinates": {
+      "latitude": 45.7054,
+      "longitude": -121.5215
+    }
   },
   {
     "name": "Le Morne",
-    "countryCode": "MU"
+    "countryCode": "MU",
+    "coordinates": {
+      "latitude": -20.4561,
+      "longitude": 57.3139
+    }
   }
 ]

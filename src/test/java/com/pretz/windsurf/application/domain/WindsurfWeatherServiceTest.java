@@ -1,5 +1,6 @@
 package com.pretz.windsurf.application.domain;
 
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
@@ -31,7 +32,8 @@ class WindsurfWeatherServiceTest {
         var result = windsurfWeatherService.findOptimalWindsurfingLocation(LocalDate.now());
 
         Assertions.assertThat(result).contains(new LocationForecast(
-                new RawLocation("Pcim", "PL"), 15.0, 15.0));
+                new RawLocation("Pcim", "PL", new Coordinates(49.7517, 19.9711)),
+                15.0, 15.0));
     }
 
     @Test
@@ -52,7 +54,8 @@ class WindsurfWeatherServiceTest {
         @Override
         public Optional<LocationForecast> selectOptimalLocation(List<Forecast> forecasts) {
             return Optional.of(new LocationForecast(
-                    new RawLocation("Pcim", "PL"), 15.0, 15.0));
+                    new RawLocation("Pcim", "PL", new Coordinates(49.7517, 19.9711)),
+                    15.0, 15.0));
         }
     }
 

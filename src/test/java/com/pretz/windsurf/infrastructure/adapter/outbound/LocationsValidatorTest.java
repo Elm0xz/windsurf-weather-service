@@ -1,5 +1,6 @@
 package com.pretz.windsurf.infrastructure.adapter.outbound;
 
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,9 +22,9 @@ class LocationsValidatorTest {
     @Test
     void shouldNotThrowForValidLocations() {
         var locations = List.of(
-                new RawLocation("Tarifa", "ES"),
-                new RawLocation("Hood River", "US"),
-                new RawLocation("Le Morne", "MU")
+                rawLocation("Tarifa", "ES"),
+                rawLocation("Hood River", "US"),
+                rawLocation("Le Morne", "MU")
         );
 
         assertThatNoException()
@@ -43,18 +44,23 @@ class LocationsValidatorTest {
                 Arguments.of((List<RawLocation>) null),
                 Arguments.of(List.of()),
                 Arguments.of(Stream.of(
-                        new RawLocation("Tarifa", "ES"),
+                        rawLocation("Tarifa", "ES"),
                         null
                 ).toList()),
-                Arguments.of(List.of(new RawLocation(null, "ES"))),
-                Arguments.of(List.of(new RawLocation("", "ES"))),
-                Arguments.of(List.of(new RawLocation("   ", "ES"))),
-                Arguments.of(List.of(new RawLocation("Tarifa", null))),
-                Arguments.of(List.of(new RawLocation("Tarifa", ""))),
-                Arguments.of(List.of(new RawLocation("Tarifa", "   "))),
-                Arguments.of(List.of(new RawLocation("Tarifa", "ESP"))),
-                Arguments.of(List.of(new RawLocation("Tarifa", "es"))),
-                Arguments.of(List.of(new RawLocation("Tarifa", "E1")))
+                Arguments.of(List.of(rawLocation(null, "ES"))),
+                Arguments.of(List.of(rawLocation("", "ES"))),
+                Arguments.of(List.of(rawLocation("   ", "ES"))),
+                Arguments.of(List.of(rawLocation("Tarifa", null))),
+                Arguments.of(List.of(rawLocation("Tarifa", ""))),
+                Arguments.of(List.of(rawLocation("Tarifa", "   "))),
+                Arguments.of(List.of(rawLocation("Tarifa", "ESP"))),
+                Arguments.of(List.of(rawLocation("Tarifa", "es"))),
+                Arguments.of(List.of(rawLocation("Tarifa", "E1"))),
+                Arguments.of(List.of(new RawLocation("Tarifa", "ES", null)))
         );
+    }
+
+    private static RawLocation rawLocation(String name, String countryCode) {
+        return new RawLocation(name, countryCode, new Coordinates(36.0143, -5.6044));
     }
 }

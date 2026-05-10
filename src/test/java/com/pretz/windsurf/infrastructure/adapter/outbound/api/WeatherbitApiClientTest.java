@@ -1,7 +1,7 @@
 package com.pretz.windsurf.infrastructure.adapter.outbound.api;
 
-
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.infrastructure.adapter.outbound.exception.WeatherApiClientException;
 import org.junit.jupiter.api.Test;
@@ -37,8 +37,8 @@ class WeatherbitApiClientTest {
         wireMock.stubFor(get(urlPathEqualTo("/v2.0/forecast/daily"))
                 .withQueryParam("key", equalTo(apiKey))
                 .withQueryParam("days", equalTo("7"))
-                .withQueryParam("city", equalTo("Tarifa"))
-                .withQueryParam("country", equalTo("ES"))
+                .withQueryParam("lat", equalTo("36.0143"))
+                .withQueryParam("lon", equalTo("-5.6044"))
                 .willReturn(okJson(responseBody())));
 
         var restClient = RestClient.builder()
@@ -48,7 +48,7 @@ class WeatherbitApiClientTest {
 
         var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath, validator);
 
-        var location = new RawLocation("Tarifa", "ES");
+        var location = new RawLocation("Tarifa", "ES", new Coordinates(36.0143, -5.6044));
         var requestDate = LocalDate.of(2026, 5, 9);
 
         var result = client.getLongtermForecastFor(location, requestDate);
@@ -70,8 +70,8 @@ class WeatherbitApiClientTest {
         wireMock.verify(getRequestedFor(urlPathEqualTo("/v2.0/forecast/daily"))
                 .withQueryParam("key", equalTo(apiKey))
                 .withQueryParam("days", equalTo("7"))
-                .withQueryParam("city", equalTo("Tarifa"))
-                .withQueryParam("country", equalTo("ES")));
+                .withQueryParam("lat", equalTo("36.0143"))
+                .withQueryParam("lon", equalTo("-5.6044")));
     }
 
     private static String responseBody() {
@@ -104,7 +104,7 @@ class WeatherbitApiClientTest {
 
         var client = new WeatherbitApiClient(restClient, apiKey, forecastDays, forecastPath, validator);
 
-        var location = new RawLocation("Tarifa", "ES");
+        var location = new RawLocation("Tarifa", "ES", new Coordinates(36.0143, -5.6044));
         var requestDate = LocalDate.of(2026, 5, 9);
 
         assertThatThrownBy(() -> client.getLongtermForecastFor(location, requestDate))

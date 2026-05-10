@@ -1,5 +1,6 @@
 package com.pretz.windsurf.infrastructure.adapter.outbound.api;
 
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import org.junit.jupiter.api.AfterEach;
@@ -26,7 +27,7 @@ class SimpleApiWeatherForecastProviderTest {
     @Test
     void shouldReturnOnlyForecastsForRequestedDate() {
         var requestedDate = LocalDate.of(2026, 5, 10);
-        var location = new RawLocation("Tarifa", "ES");
+        var location = locationTarifa();
 
         var matchingForecast = new Forecast(location, requestedDate, requestedDate, 8.5, 22.0);
         var otherDayForecast1 = new Forecast(location, requestedDate, requestedDate.plusDays(1), 6.0, 21.0);
@@ -44,8 +45,8 @@ class SimpleApiWeatherForecastProviderTest {
     void shouldAggregateForecastsFromMultipleLocations() {
         var requestedDate = LocalDate.of(2026, 5, 10);
 
-        var firstLocation = new RawLocation("Tarifa", "ES");
-        var secondLocation = new RawLocation("Jastarnia", "PL");
+        var firstLocation = locationTarifa();
+        var secondLocation = locationJastarnia();
 
         var firstLocationForecast = new Forecast(firstLocation, requestedDate, requestedDate, 8.5, 22.0);
         var secondLocationForecast = new Forecast(secondLocation, requestedDate, requestedDate, 7.0, 18.0);
@@ -62,8 +63,8 @@ class SimpleApiWeatherForecastProviderTest {
     void shouldAggregateAndReturnOnlyForecastsForRequestedDateForMultipleLocations() {
         var requestedDate = LocalDate.of(2026, 5, 10);
 
-        var firstLocation = new RawLocation("Tarifa", "ES");
-        var secondLocation = new RawLocation("Jastarnia", "PL");
+        var firstLocation = locationTarifa();
+        var secondLocation = locationJastarnia();
 
         var firstLocationForecastOnRequestedDay = new Forecast(firstLocation, requestedDate,
                 requestedDate, 8.5, 22.0);
@@ -88,8 +89,8 @@ class SimpleApiWeatherForecastProviderTest {
     void shouldCallApiClientForEachLocation() {
         var requestedDate = LocalDate.of(2026, 5, 10);
 
-        var location1 = new RawLocation("Tarifa", "ES");
-        var location2 = new RawLocation("Jastarnia", "PL");
+        var location1 = locationTarifa();
+        var location2 = locationJastarnia();
 
         when(apiClient.getLongtermForecastFor(location1, requestedDate)).thenReturn(List.of());
         when(apiClient.getLongtermForecastFor(location2, requestedDate)).thenReturn(List.of());
@@ -98,5 +99,13 @@ class SimpleApiWeatherForecastProviderTest {
 
         verify(apiClient).getLongtermForecastFor(location1, requestedDate);
         verify(apiClient).getLongtermForecastFor(location2, requestedDate);
+    }
+
+    private RawLocation locationTarifa() {
+        return new RawLocation("Tarifa", "ES", new Coordinates(36.0143, -5.6044));
+    }
+
+    private RawLocation locationJastarnia() {
+        return new RawLocation("Jastarnia", "PL", new Coordinates(54.6961, 18.6787));
     }
 }
