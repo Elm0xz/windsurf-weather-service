@@ -84,7 +84,7 @@ curl "http://localhost:8080/api/windsurfing-location?date=2026-05-15"
 Run the packaged application:
 
 ```bash
-WEATHERBIT_API_KEY=<your_api_key> java -jar build/libs/windsurf-weather-service-1.0-SNAPSHOT.jar
+WEATHERBIT_API_KEY=<your_api_key> java -jar build/libs/windsurf-weather-service.jar
 ```
 
 ### Running tests

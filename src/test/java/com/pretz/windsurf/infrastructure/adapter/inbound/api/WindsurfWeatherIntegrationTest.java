@@ -100,7 +100,7 @@ class WindsurfWeatherIntegrationTest {
                         .param("date", date.toString()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith("application/json"))
-                .andExpect(jsonPath("$.message").value("Forecast date should be between today and 7 days from today"));
+                .andExpect(jsonPath("$.message").value("Forecast date should be in the 7 forecast day range"));
 
         verify(weatherApiClient, never()).getLongtermForecastFor(any(RawLocation.class), eq(date));
     }
@@ -111,7 +111,17 @@ class WindsurfWeatherIntegrationTest {
                         .param("date", "tomorrow"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith("application/json"))
-                .andExpect(jsonPath("$.message").value("Date must be provided in ISO format: yyyy-mm-dd"));
+                .andExpect(jsonPath("$.message").value("Date must be provided in ISO format: yyyy-MM-dd"));
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenDateParameterIsMissing() throws Exception {
+        mockMvc.perform(get(ENDPOINT))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith("application/json"))
+                .andExpect(jsonPath("$.message").value("Required request parameter 'date' is missing"));
+
+        verify(weatherApiClient, never()).getLongtermForecastFor(any(RawLocation.class), any(LocalDate.class));
     }
 
     @Test

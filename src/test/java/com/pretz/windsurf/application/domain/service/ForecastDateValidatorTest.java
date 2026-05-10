@@ -22,7 +22,7 @@ class ForecastDateValidatorTest {
 
         Assertions.assertThatExceptionOfType(InvalidForecastDateException.class)
                 .isThrownBy(() -> validator.validate(date))
-                .withMessage("Forecast date should be between today and 7 days from today");
+                .withMessage("Forecast date should be in the 7 forecast day range");
     }
 
     @ParameterizedTest()
@@ -42,7 +42,7 @@ class ForecastDateValidatorTest {
 
     private static Stream<Arguments> provideInvalidDates() {
         return Stream.of(
-                Arguments.of(TODAY.plusDays(8)),
+                Arguments.of(TODAY.plusDays(7)),
                 Arguments.of(TODAY.plusDays(15)),
                 Arguments.of(TODAY.plusDays(25)),
                 Arguments.of(TODAY.minusDays(3)),
@@ -56,7 +56,7 @@ class ForecastDateValidatorTest {
                 Arguments.of(TODAY.plusDays(1)),
                 Arguments.of(TODAY.plusDays(2)),
                 Arguments.of(TODAY.plusDays(3)),
-                Arguments.of(TODAY.plusDays(7))
+                Arguments.of(TODAY.plusDays(6))
         );
     }
 }
