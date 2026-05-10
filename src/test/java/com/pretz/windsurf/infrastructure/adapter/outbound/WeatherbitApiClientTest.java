@@ -1,8 +1,9 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.pretz.windsurf.application.domain.model.RawLocation;
+import com.pretz.windsurf.infrastructure.adapter.outbound.exception.WeatherApiClientException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;

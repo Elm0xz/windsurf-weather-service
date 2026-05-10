@@ -1,4 +1,4 @@
-package com.pretz.windsurf.application.domain.service;
+package com.pretz.windsurf.application.domain.validation;
 
 public class InvalidForecastDateException extends RuntimeException {
 

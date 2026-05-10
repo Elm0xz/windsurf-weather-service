@@ -1,4 +1,4 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;

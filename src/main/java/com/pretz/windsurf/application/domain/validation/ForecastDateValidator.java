@@ -1,10 +1,7 @@
-package com.pretz.windsurf.application.domain.service;
-
-import org.springframework.stereotype.Component;
+package com.pretz.windsurf.application.domain.validation;
 
 import java.time.LocalDate;
 
-@Component
 public class ForecastDateValidator {
 
     private static final String NULL_MESSAGE = "Forecast date must not be null";

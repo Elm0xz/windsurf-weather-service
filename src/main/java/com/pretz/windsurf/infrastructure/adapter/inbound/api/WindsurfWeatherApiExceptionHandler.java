@@ -1,6 +1,6 @@
-package com.pretz.windsurf.infrastructure.adapter.api;
+package com.pretz.windsurf.infrastructure.adapter.inbound.api;
 
-import com.pretz.windsurf.application.domain.service.InvalidForecastDateException;
+import com.pretz.windsurf.application.domain.validation.InvalidForecastDateException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

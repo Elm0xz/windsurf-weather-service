@@ -1,4 +1,4 @@
-package com.pretz.windsurf.application.domain;
+package com.pretz.windsurf.application.domain.service;
 
 import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.Forecast;

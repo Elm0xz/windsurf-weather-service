@@ -1,6 +1,7 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
+import com.pretz.windsurf.infrastructure.adapter.outbound.exception.LocationsProviderException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

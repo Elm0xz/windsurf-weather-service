@@ -1,8 +1,9 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
+import com.pretz.windsurf.infrastructure.adapter.outbound.exception.WeatherApiClientException;
 import com.pretz.windsurf.infrastructure.configuration.WeatherbitProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

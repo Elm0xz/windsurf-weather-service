@@ -1,7 +1,7 @@
 package com.pretz.windsurf.infrastructure.adapter.runner;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import com.pretz.windsurf.infrastructure.adapter.WeatherbitApiClient;
+import com.pretz.windsurf.infrastructure.adapter.outbound.WeatherbitApiClient;
 import org.springframework.web.client.RestClient;
 
 import java.time.LocalDate;

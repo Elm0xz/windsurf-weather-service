@@ -1,4 +1,4 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound.exception;
 
 public class WeatherApiClientException extends RuntimeException {
 

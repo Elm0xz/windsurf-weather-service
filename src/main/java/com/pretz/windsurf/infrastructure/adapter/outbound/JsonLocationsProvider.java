@@ -1,7 +1,8 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import com.pretz.windsurf.application.port.LocationsProviderPort;
+import com.pretz.windsurf.application.port.outbound.LocationsProviderPort;
+import com.pretz.windsurf.infrastructure.adapter.outbound.exception.LocationsProviderException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.core.type.TypeReference;

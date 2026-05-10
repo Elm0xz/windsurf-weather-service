@@ -1,6 +1,6 @@
-package com.pretz.windsurf.infrastructure.adapter.api;
+package com.pretz.windsurf.infrastructure.adapter.inbound.api;
 
-import com.pretz.windsurf.infrastructure.adapter.api.dto.LocationForecastDto;
+import com.pretz.windsurf.infrastructure.adapter.inbound.api.dto.LocationForecastDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

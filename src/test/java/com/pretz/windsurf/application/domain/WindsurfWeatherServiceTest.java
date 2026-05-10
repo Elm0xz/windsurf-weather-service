@@ -3,11 +3,11 @@ package com.pretz.windsurf.application.domain;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.LocationForecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import com.pretz.windsurf.application.domain.service.ForecastDateValidator;
-import com.pretz.windsurf.application.port.LocationsProviderPort;
-import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
-import com.pretz.windsurf.application.domain.service.WindsurfWeatherService;
-import com.pretz.windsurf.application.port.WindsurfWeatherPort;
+import com.pretz.windsurf.application.domain.validation.ForecastDateValidator;
+import com.pretz.windsurf.application.domain.service.LocationSelector;
+import com.pretz.windsurf.application.port.outbound.LocationsProviderPort;
+import com.pretz.windsurf.application.port.outbound.WeatherForecastProviderPort;
+import com.pretz.windsurf.application.port.inbound.WindsurfWeatherPort;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -75,7 +75,7 @@ class WindsurfWeatherServiceTest {
     static class WeatherForecastProviderMock implements WeatherForecastProviderPort {
 
         @Override
-        public List<Forecast> getForecastsFor(List<RawLocation> locations, LocalDate date) {
+        public List<Forecast> provideForecastsFor(List<RawLocation> locations, LocalDate date) {
             return List.of();
         }
     }

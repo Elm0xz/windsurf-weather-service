@@ -1,4 +1,4 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
@@ -35,7 +35,7 @@ class SimpleApiWeatherForecastProviderTest {
         when(apiClient.getLongtermForecastFor(location, requestedDate))
                 .thenReturn(List.of(matchingForecast, otherDayForecast1, otherDayForecast2));
 
-        var result = provider.getForecastsFor(List.of(location), requestedDate);
+        var result = provider.provideForecastsFor(List.of(location), requestedDate);
 
         assertThat(result).containsExactly(matchingForecast);
     }
@@ -53,7 +53,7 @@ class SimpleApiWeatherForecastProviderTest {
         when(apiClient.getLongtermForecastFor(firstLocation, requestedDate)).thenReturn(List.of(firstLocationForecast));
         when(apiClient.getLongtermForecastFor(secondLocation, requestedDate)).thenReturn(List.of(secondLocationForecast));
 
-        var result = provider.getForecastsFor(List.of(firstLocation, secondLocation), requestedDate);
+        var result = provider.provideForecastsFor(List.of(firstLocation, secondLocation), requestedDate);
 
         assertThat(result).containsExactly(firstLocationForecast, secondLocationForecast);
     }
@@ -79,7 +79,7 @@ class SimpleApiWeatherForecastProviderTest {
         when(apiClient.getLongtermForecastFor(secondLocation, requestedDate))
                 .thenReturn(List.of(secondLocationForecastOnRequestedDay, secondLocationForecastOnOtherDay));
 
-        var result = provider.getForecastsFor(List.of(firstLocation, secondLocation), requestedDate);
+        var result = provider.provideForecastsFor(List.of(firstLocation, secondLocation), requestedDate);
 
         assertThat(result).containsExactly(firstLocationForecastOnRequestedDay, secondLocationForecastOnRequestedDay);
     }
@@ -94,7 +94,7 @@ class SimpleApiWeatherForecastProviderTest {
         when(apiClient.getLongtermForecastFor(location1, requestedDate)).thenReturn(List.of());
         when(apiClient.getLongtermForecastFor(location2, requestedDate)).thenReturn(List.of());
 
-        provider.getForecastsFor(List.of(location1, location2), requestedDate);
+        provider.provideForecastsFor(List.of(location1, location2), requestedDate);
 
         verify(apiClient).getLongtermForecastFor(location1, requestedDate);
         verify(apiClient).getLongtermForecastFor(location2, requestedDate);

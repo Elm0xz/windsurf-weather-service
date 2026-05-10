@@ -1,16 +1,15 @@
-package com.pretz.windsurf.application.domain.service;
+package com.pretz.windsurf.application.domain;
 
-import com.pretz.windsurf.application.domain.LocationSelector;
-import com.pretz.windsurf.application.port.WindsurfWeatherPort;
 import com.pretz.windsurf.application.domain.model.LocationForecast;
-import com.pretz.windsurf.application.port.LocationsProviderPort;
-import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
-import org.springframework.stereotype.Service;
+import com.pretz.windsurf.application.domain.validation.ForecastDateValidator;
+import com.pretz.windsurf.application.domain.service.LocationSelector;
+import com.pretz.windsurf.application.port.inbound.WindsurfWeatherPort;
+import com.pretz.windsurf.application.port.outbound.LocationsProviderPort;
+import com.pretz.windsurf.application.port.outbound.WeatherForecastProviderPort;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-@Service
 public class WindsurfWeatherService implements WindsurfWeatherPort {
 
     private final LocationsProviderPort locationsProvider;
@@ -33,7 +32,7 @@ public class WindsurfWeatherService implements WindsurfWeatherPort {
         forecastDateValidator.validate(date);
 
         return locationSelector.selectOptimalLocation(
-                weatherForecastProvider.getForecastsFor(
+                weatherForecastProvider.provideForecastsFor(
                         locationsProvider.provideLocations(), date));
     }
 }

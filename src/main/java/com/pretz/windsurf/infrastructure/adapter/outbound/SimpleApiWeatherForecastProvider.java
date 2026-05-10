@@ -1,8 +1,9 @@
-package com.pretz.windsurf.infrastructure.adapter;
+package com.pretz.windsurf.infrastructure.adapter.outbound;
 
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
-import com.pretz.windsurf.application.port.WeatherForecastProviderPort;
+import com.pretz.windsurf.application.port.outbound.WeatherForecastProviderPort;
+import com.pretz.windsurf.infrastructure.adapter.outbound.exception.WeatherForecastProviderException;
 import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
     }
 
     @Override
-    public List<Forecast> getForecastsFor(List<RawLocation> locations, LocalDate requestDate) {
+    public List<Forecast> provideForecastsFor(List<RawLocation> locations, LocalDate requestDate) {
         //TODO validation on locations?
         Objects.requireNonNull(locations, "locations must not be null");
         Objects.requireNonNull(requestDate, "requestDate must not be null");
