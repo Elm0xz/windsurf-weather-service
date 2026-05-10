@@ -11,7 +11,6 @@ public class BaseLocationSelector implements LocationSelector {
 
     @Override
     public Optional<LocationForecast> selectOptimalLocation(List<Forecast> forecasts) {
-        //TODO log warn instead
         Objects.requireNonNull(forecasts, "forecasts must not be null");
 
         return forecasts.stream()

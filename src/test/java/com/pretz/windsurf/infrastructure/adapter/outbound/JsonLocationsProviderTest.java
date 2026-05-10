@@ -1,5 +1,6 @@
 package com.pretz.windsurf.infrastructure.adapter.outbound;
 
+import com.pretz.windsurf.application.domain.model.Coordinates;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.outbound.exception.LocationsUnavailableException;
 import org.assertj.core.api.Assertions;
@@ -23,11 +24,11 @@ class JsonLocationsProviderTest {
 
         Assertions.assertThat(locations)
                 .hasSize(3)
-                .extracting(RawLocation::name, RawLocation::countryCode)
+                .extracting(RawLocation::name, RawLocation::countryCode, RawLocation::coordinates)
                 .containsExactly(
-                        Assertions.tuple("Tarifa", "ES", 36.0143, -5.6044),
-                        Assertions.tuple("Hood River", "US", 45.7054, -121.5215),
-                        Assertions.tuple("Le Morne", "MU", -20.4561, 57.3139)
+                        Assertions.tuple("Tarifa", "ES", new Coordinates(36.0143, -5.6044)),
+                        Assertions.tuple("Hood River", "US", new Coordinates(45.7054, -121.5215)),
+                        Assertions.tuple("Le Morne", "MU", new Coordinates(-20.4561, 57.3139))
                 );
     }
 

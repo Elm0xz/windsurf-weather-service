@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-//TODO profiles
 @Configuration
 @EnableConfigurationProperties(WeatherbitProperties.class)
 public class WindsurfWeatherConfig {
@@ -44,7 +43,6 @@ public class WindsurfWeatherConfig {
 
     @Bean
     public RestClient restClient(WeatherbitProperties weatherbitProperties) {
-        //TODO path to config
         return RestClient.builder()
                 .baseUrl(weatherbitProperties.baseUrl())
                 .build();

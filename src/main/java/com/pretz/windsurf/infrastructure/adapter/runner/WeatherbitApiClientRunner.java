@@ -10,12 +10,11 @@ import java.time.LocalDate;
 
 class WeatherbitApiClientRunner {
 
-    static void main() {
+    static void main(String[] args) {
         var client = RestClient.builder()
                 .baseUrl("https://api.weatherbit.io")
                 .build();
-        //TODO remove this
-        String apiKey = "2f2da76fe6674f6293a9ff2f04981556";
+        String apiKey = args[0];
         int forecastDays = 7;
         String forecastPath = "/v2.0/forecast/daily";
         var result = new WeatherbitApiClient(client, apiKey, forecastDays, forecastPath, new WeatherbitApiValidator())

@@ -22,8 +22,7 @@ import static org.mockito.Mockito.mock;
 
 class WeatherbitApiClientTest {
 
-    //TODO remove this
-    private static final String apiKey = "2f2da76fe6674f6293a9ff2f04981556";
+    private static final String apiKey = "TEST-API-KEY";
     private static final int forecastDays = 7;
     private static final String forecastPath = "/v2.0/forecast/daily";
     private final WeatherbitApiValidator validator = mock(WeatherbitApiValidator.class);

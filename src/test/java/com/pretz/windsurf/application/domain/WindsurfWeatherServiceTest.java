@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-//TODO refactor later
+//TODO [WIND-13] replace with integration test
 class WindsurfWeatherServiceTest {
 
     private WindsurfWeatherPort windsurfWeatherService;

@@ -5,6 +5,8 @@ import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.outbound.WeatherForecastProviderPort;
 import com.pretz.windsurf.application.port.outbound.exception.ForecastProviderUnavailableException;
 import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,8 +18,11 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+//TODO [WIND-6] Caching forecasts
 @Service
 public class SimpleApiWeatherForecastProvider implements WeatherForecastProviderPort, AutoCloseable {
+
+    private static final Logger log = LoggerFactory.getLogger(SimpleApiWeatherForecastProvider.class);
 
     private final WeatherApiClient apiClient;
     private final ExecutorService executorService;
@@ -29,7 +34,6 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
 
     @Override
     public List<Forecast> provideForecastsFor(List<RawLocation> locations, LocalDate requestDate) {
-        //TODO validation on locations?
         validateInput(locations, requestDate);
 
         var futures = locations.stream()
@@ -39,11 +43,15 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
                 )).toList();
 
         try {
-            return futures.stream()
+            List<Forecast> forecasts = futures.stream()
                     .map(CompletableFuture::join)
                     .flatMap(List::stream)
                     .filter(fc -> requestDate.equals(fc.forecastDate()))
                     .toList();
+
+            log.debug("Fetched forecasts for date {}: {}", requestDate, forecasts);
+
+            return forecasts;
         } catch (CompletionException | CancellationException exception) {
             throw new ForecastProviderUnavailableException(
                     "Could not fetch weather forecasts",

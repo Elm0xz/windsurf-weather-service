@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Jastarnia",
+    "countryCode": "PL",
+    "coordinates": {
+      "latitude": 54.6961,
+      "longitude": 18.6787
+    }
+  },
+  {
+    "name": "Fortaleza",
+    "countryCode": "BR",
+    "coordinates": {
+      "latitude": -3.7319,
+      "longitude": -38.5267
+    }
+  },
+  {
+    "name": "Pissouri",
+    "countryCode": "CY",
+    "coordinates": {
+      "latitude": 34.6694,
+      "longitude": 32.7019
+    }
+  },
+  {
+    "name": "Le Morne",
+    "countryCode": "MU",
+    "coordinates": {
+      "latitude": -20.4561,
+      "longitude": 57.3139
+    }
+  }
+]
