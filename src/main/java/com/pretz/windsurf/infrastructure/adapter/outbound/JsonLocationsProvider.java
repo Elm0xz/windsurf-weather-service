@@ -31,7 +31,7 @@ public class JsonLocationsProvider implements LocationsProviderPort {
     }
 
     @Override
-    //TODO [WIND-6] caching locations
+    //TODO [WIND-15] Load locations to memory on startup
     public List<RawLocation> provideLocations() {
         try (InputStream locationsStream = Objects.requireNonNull(
                 getClass().getClassLoader().getResourceAsStream(locationsSourceName))) {
