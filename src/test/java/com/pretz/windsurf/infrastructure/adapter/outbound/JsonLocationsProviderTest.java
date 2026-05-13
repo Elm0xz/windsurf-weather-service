@@ -16,10 +16,11 @@ import java.util.stream.Stream;
 class JsonLocationsProviderTest {
 
     @Test
-    void shouldProvideLocationsListFromJson() {
+    void shouldLoadLocationListOnInitAndProvideThemOnDemand() {
         var provider = new JsonLocationsProvider("test-locations.json",
                 new ObjectMapper(), new LocationsValidator());
 
+        provider.init();
         List<RawLocation> locations = provider.provideLocations();
 
         Assertions.assertThat(locations)
@@ -34,12 +35,12 @@ class JsonLocationsProviderTest {
 
     @ParameterizedTest
     @MethodSource("failingLocationSources")
-    void shouldFailProvidingLocations(String locationsSource) {
+    void shouldFailLoadingLocations(String locationsSource) {
         var provider = new JsonLocationsProvider(locationsSource,
                 new ObjectMapper(), new LocationsValidator());
 
         Assertions.assertThatExceptionOfType(LocationsUnavailableException.class)
-                .isThrownBy(provider::provideLocations)
+                .isThrownBy(provider::init)
                 .withMessage("Could not provide locations from resource: %s".formatted(locationsSource));
     }
 

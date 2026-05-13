@@ -51,7 +51,6 @@ Example of a successful response:
 | `400 Bad Request`           | Invalid date format or date outside supported range |
 | `404 Not Found`             | No location matches windsurfing criteria            |
 | `502 Bad Gateway`           | Weather provider is unavailable                     |
-| `500 Internal Server Error` | Locations source cannot be loaded                   |
 
 ## Setup
 

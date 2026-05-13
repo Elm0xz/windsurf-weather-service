@@ -2,7 +2,6 @@ package com.pretz.windsurf.infrastructure.adapter.inbound.api;
 
 import com.pretz.windsurf.application.domain.validation.InvalidForecastDateException;
 import com.pretz.windsurf.application.port.outbound.exception.ForecastProviderUnavailableException;
-import com.pretz.windsurf.application.port.outbound.exception.LocationsUnavailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ class WindsurfWeatherApiExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(WindsurfWeatherApiExceptionHandler.class);
 
     private static final String FORECAST_PROVIDER_UNAVAILABLE_ERROR_MESSAGE = "Forecast provider is currently unavailable";
-    private static final String LOCATIONS_UNAVAILABLE_ERROR_MESSAGE = "Locations source is currently unavailable";
 
     @ExceptionHandler(InvalidForecastDateException.class)
     ResponseEntity<ErrorResponse> handleInvalidForecastDate(InvalidForecastDateException exception) {
@@ -32,13 +30,6 @@ class WindsurfWeatherApiExceptionHandler {
         log.warn(FORECAST_PROVIDER_UNAVAILABLE_ERROR_MESSAGE, exception);
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                 .body(new ErrorResponse(FORECAST_PROVIDER_UNAVAILABLE_ERROR_MESSAGE));
-    }
-
-    @ExceptionHandler(LocationsUnavailableException.class)
-    ResponseEntity<ErrorResponse> handleLocationsUnavailable(LocationsUnavailableException exception) {
-        log.warn(LOCATIONS_UNAVAILABLE_ERROR_MESSAGE, exception);
-        return ResponseEntity.internalServerError()
-                .body(new ErrorResponse(LOCATIONS_UNAVAILABLE_ERROR_MESSAGE));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
