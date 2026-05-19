@@ -84,7 +84,6 @@ class LocationSelectorTest {
         return new Forecast(
                 rawLocation(name, country),
                 LocalDate.now(),
-                LocalDate.now(),
                 windSpeed,
                 temperature
         );

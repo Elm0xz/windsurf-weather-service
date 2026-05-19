@@ -5,13 +5,13 @@ import java.util.Comparator;
 
 /**
  * Entity representing full weather forecast for a location and particular day.
+ *
  * @param location
- * @param requestDate
  * @param forecastDate
  * @param windSpeed
  * @param temperature
  */
-public record Forecast(RawLocation location, LocalDate requestDate, LocalDate forecastDate,
+public record Forecast(RawLocation location, LocalDate forecastDate,
                        double windSpeed, double temperature) {
 
     public static Comparator<Forecast> byWindsurfingValue() {

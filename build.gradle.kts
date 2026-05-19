@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
     testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.junit.jupiter:junit-jupiter")

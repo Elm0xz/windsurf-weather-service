@@ -1,5 +1,6 @@
 package com.pretz.windsurf.infrastructure.adapter.outbound.api;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.pretz.windsurf.application.domain.model.Forecast;
 import com.pretz.windsurf.application.domain.model.RawLocation;
 import com.pretz.windsurf.application.port.outbound.WeatherForecastProviderPort;
@@ -7,6 +8,7 @@ import com.pretz.windsurf.application.port.outbound.exception.ForecastProviderUn
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,28 +19,52 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
-//TODO [WIND-6] Caching proxy
 @Service
-public class SimpleApiWeatherForecastProvider implements WeatherForecastProviderPort, AutoCloseable {
+public class WeatherForecastProvider implements WeatherForecastProviderPort, AutoCloseable {
 
-    private static final Logger log = LoggerFactory.getLogger(SimpleApiWeatherForecastProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(WeatherForecastProvider.class);
 
     private final WeatherApiClient apiClient;
     private final ExecutorService executorService;
+    private final Cache<LocalDate, List<Forecast>> dailyForecastsCache;
 
-    public SimpleApiWeatherForecastProvider(WeatherApiClient apiClient) {
+    public WeatherForecastProvider(WeatherApiClient apiClient, Cache<LocalDate, List<Forecast>> dailyForecastsCache,
+                                   @Value("${windsurf.forecast.executor.pool-size}")int poolSize) {
         this.apiClient = apiClient;
-        this.executorService = Executors.newFixedThreadPool(3);
+        this.dailyForecastsCache = dailyForecastsCache;
+        this.executorService = Executors.newFixedThreadPool(poolSize);
     }
 
     @Override
     public List<Forecast> provideForecastsFor(List<RawLocation> locations, LocalDate requestDate) {
         validateInput(locations, requestDate);
 
+        // Concurrent cache misses may trigger duplicate API calls but this is acceptable for now due to low traffic and the cache TTL
+        List<Forecast> dailyForecast = dailyForecastsCache.getIfPresent(requestDate);
+        if (dailyForecast != null) {
+            return dailyForecast;
+        }
+
+        return getForecastsFromApiAndAddToCache(locations, requestDate);
+    }
+
+    private List<Forecast> getForecastsFromApiAndAddToCache(List<RawLocation> locations, LocalDate requestDate) {
+        List<Forecast> forecasts = getForecastsFromApi(locations);
+        var forecastsByDay = forecasts.stream()
+                .collect(Collectors.groupingBy(Forecast::forecastDate));
+        dailyForecastsCache.putAll(forecastsByDay);
+
+        return forecasts.stream()
+                .filter(fc -> requestDate.equals(fc.forecastDate()))
+                .toList();
+    }
+
+    private List<Forecast> getForecastsFromApi(List<RawLocation> locations) {
         var futures = locations.stream()
                 .map(location -> CompletableFuture.supplyAsync(
-                        () -> apiClient.getLongtermForecastFor(location, requestDate),
+                        () -> apiClient.getLongtermForecastFor(location),
                         executorService
                 )).toList();
 
@@ -46,10 +72,9 @@ public class SimpleApiWeatherForecastProvider implements WeatherForecastProvider
             List<Forecast> forecasts = futures.stream()
                     .map(CompletableFuture::join)
                     .flatMap(List::stream)
-                    .filter(fc -> requestDate.equals(fc.forecastDate()))
                     .toList();
 
-            log.debug("Fetched forecasts for date {}: {}", requestDate, forecasts);
+            log.debug("Fetched forecasts: {}", forecasts);
 
             return forecasts;
         } catch (CompletionException | CancellationException exception) {

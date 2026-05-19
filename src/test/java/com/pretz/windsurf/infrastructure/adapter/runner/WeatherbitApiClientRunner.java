@@ -6,8 +6,6 @@ import com.pretz.windsurf.infrastructure.adapter.outbound.api.WeatherbitApiClien
 import com.pretz.windsurf.infrastructure.adapter.outbound.api.WeatherbitApiValidator;
 import org.springframework.web.client.RestClient;
 
-import java.time.LocalDate;
-
 class WeatherbitApiClientRunner {
 
     static void main(String[] args) {
@@ -18,7 +16,7 @@ class WeatherbitApiClientRunner {
         int forecastDays = 7;
         String forecastPath = "/v2.0/forecast/daily";
         var result = new WeatherbitApiClient(client, apiKey, forecastDays, forecastPath, new WeatherbitApiValidator())
-                .getLongtermForecastFor(new RawLocation("Le Morne", "MU", new Coordinates(-20.4561, 57.3139)), LocalDate.now());
+                .getLongtermForecastFor(new RawLocation("Le Morne", "MU", new Coordinates(-20.4561, 57.3139)));
 
         System.out.println(result);
     }

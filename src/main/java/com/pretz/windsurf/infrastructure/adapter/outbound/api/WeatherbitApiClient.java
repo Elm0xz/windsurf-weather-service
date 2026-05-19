@@ -44,12 +44,12 @@ public class WeatherbitApiClient implements WeatherApiClient {
     }
 
     @Override
-    public List<Forecast> getLongtermForecastFor(RawLocation location, LocalDate requestDate) {
+    public List<Forecast> getLongtermForecastFor(RawLocation location) {
         try {
             ForecastDto response = fetchForecasts(location);
             validator.validateResponse(response);
 
-            return mapResponse(location, requestDate, response);
+            return mapResponse(location, response);
         } catch (RestClientException exception) {
             throw new WeatherApiClientException("Could not fetch long-term forecast from Weatherbit", exception);
         }
@@ -68,11 +68,10 @@ public class WeatherbitApiClient implements WeatherApiClient {
                 .body(ForecastDto.class);
     }
 
-    private List<Forecast> mapResponse(RawLocation location, LocalDate requestDate, ForecastDto response) {
+    private List<Forecast> mapResponse(RawLocation location, ForecastDto response) {
         return response.data().stream()
                 .map(dailyForecastDto -> new Forecast(
                         location,
-                        requestDate,
                         dailyForecastDto.forecastDay(),
                         dailyForecastDto.windSpeed(),
                         dailyForecastDto.temperature()

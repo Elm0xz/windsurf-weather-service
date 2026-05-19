@@ -50,18 +50,16 @@ class WeatherbitApiClientTest {
         var location = new RawLocation("Tarifa", "ES", new Coordinates(36.0143, -5.6044));
         var requestDate = LocalDate.of(2026, 5, 9);
 
-        var result = client.getLongtermForecastFor(location, requestDate);
+        var result = client.getLongtermForecastFor(location);
 
         assertThat(result).hasSize(2);
 
         assertThat(result.getFirst().location()).isEqualTo(location);
-        assertThat(result.getFirst().requestDate()).isEqualTo(requestDate);
         assertThat(result.getFirst().forecastDate()).isEqualTo(LocalDate.of(2026, 5, 10));
         assertThat(result.getFirst().windSpeed()).isEqualTo(8.5);
         assertThat(result.getFirst().temperature()).isEqualTo(22.0);
 
         assertThat(result.get(1).location()).isEqualTo(location);
-        assertThat(result.get(1).requestDate()).isEqualTo(requestDate);
         assertThat(result.get(1).forecastDate()).isEqualTo(LocalDate.of(2026, 5, 11));
         assertThat(result.get(1).windSpeed()).isEqualTo(6.2);
         assertThat(result.get(1).temperature()).isEqualTo(21.5);
@@ -106,7 +104,7 @@ class WeatherbitApiClientTest {
         var location = new RawLocation("Tarifa", "ES", new Coordinates(36.0143, -5.6044));
         var requestDate = LocalDate.of(2026, 5, 9);
 
-        assertThatThrownBy(() -> client.getLongtermForecastFor(location, requestDate))
+        assertThatThrownBy(() -> client.getLongtermForecastFor(location))
                 .isInstanceOf(WeatherApiClientException.class)
                 .hasMessage("Could not fetch long-term forecast from Weatherbit");
     }
